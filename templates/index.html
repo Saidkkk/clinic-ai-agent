@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}الرئيسية{% endblock %}
+{% block content %}
+
+<h3>📅 سجل الزيارات</h3>
+
+<!-- باقي محتوى الصفحة كما هو -->
+
+
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>مساعد الطبيب</title>
+    <h4 class="text-primary mb-4 border-bottom pb-2">📋 {{ page_title }}</h4>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 30px;
+            background-color: #f8f9fa;
+        }
+
+        .card {
+            margin-bottom: 20px;
+        }
+
+        .form-control,
+        .btn {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+ <a href="{{ url_for('logout') }}" class="btn btn-danger">🚪 تسجيل الخروج</a>
+<p class="text-end">مرحبًا، {{ session['username'] }} ({{ 'مدير' if session['role'] == 'admin' else 'مستخدم' }})</p>
+<a href="{{ url_for('change_password') }}" class="btn btn-outline-dark">🔑 تغيير كلمة المرور</a>
+{% if session['role'] == 'admin' %}
+    <a href="{{ url_for('create_user') }}" class="btn btn-outline-success">👤 إنشاء مستخدم</a>
+{% endif %}
+
+    <div class="container">
+        <h1 class="mb-4 text-center">🩺 مساعد الطبيب</h1>
+        <a href="{{ url_for('manage_patients') }}" class="btn btn-outline-success mb-3">👥 إدارة المرضى</a>
+
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                تسجيل زيارة جديدة
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+
+
+                    <label>اختر المريض</label>
+                    <select name="patient_id" class="form-control" required>
+                        {% for patient in patients %}
+                            <option value="{{ patient[0] }}">{{ patient[1] }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <label>التاريخ</label>
+                    <input type="date" name="date" class="form-control" required>
+
+                    <label>السبب</label>
+                    <input type="text" name="reason" class="form-control">
+
+                     <label>صورة</label>
+                    <input type="file" name="image" class="form-control">
+
+                    <button type="submit" class="btn btn-success mt-3">💾 حفظ</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                تحليل الذكاء الاصطناعي
+            </div>
+            <div class="card-body">
+                <p>{{ analysis }}</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header bg-secondary text-white">
+                كل الزيارات
+            </div>
+               <a href="{{ url_for('download_pdf') }}" class="btn btn-outline-danger mb-3">📄 تحميل تقرير PDF</a>
+
+            <div class="card-body">
+                <ul class="list-group">
+{% for visit in visits %}
+    <li class="list-group-item">
+        👤 <a href="{{ url_for('patient_details', patient_id=visit[0]) }}">{{ visit[1] }}</a>
+
+
+        {% if visit[4] %}
+            <br>
+            <img src="{{ url_for('uploaded_file', filename=visit[4]) }}" width="150">
+            
+        {% endif %}
+    </li>
+{% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+{% endblock %}

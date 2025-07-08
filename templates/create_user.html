@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}الرئيسية{% endblock %}
+{% block content %}
+
+<h3>📅 سجل الزيارات</h3>
+
+<!-- باقي محتوى الصفحة كما هو -->
+
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>إنشاء مستخدم جديد</title>
+    <h4 class="text-primary mb-4 border-bottom pb-2">📋 {{ page_title }}</h4>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+</head>
+<body class="container mt-5">
+
+    <h3>👤 إنشاء مستخدم جديد</h3>
+    <a href="{{ url_for('index') }}" class="btn btn-secondary my-3">⬅️ العودة للرئيسية</a>
+
+    {% if message %}
+        <div class="alert alert-info">{{ message }}</div>
+    {% endif %}
+
+    <form method="POST" class="w-50">
+        <div class="mb-3">
+            <label>اسم المستخدم</label>
+            <input type="text" name="username" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label>كلمة المرور</label>
+            <input type="password" name="password" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label>نوع الحساب</label>
+            <select name="role" class="form-control" required>
+                <option value="user">مستخدم عادي</option>
+                <option value="admin">مدير</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">➕ إنشاء المستخدم</button>
+    </form>
+
+</body>
+</html>
+{% endblock %}
